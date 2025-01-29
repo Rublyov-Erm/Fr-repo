@@ -21,19 +21,43 @@
 
 
 import random
+def get_numbers_ticket(min: int, max: int, quant: int):
+    tickets = list()
+    if 1 <= min < max <= 1000:
+        tickets = sorted(random.sample(range(min, max), quant))
+
+    return tickets
 
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+lottery_numbers = get_numbers_ticket(1, 49, 6)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import re
+
+raw_numbers = [
+    "067\\t123 4567",
+    "(095) 234-5678\\n",
+    "+380 44 123 4567",
+    "380501234567",
+    "    +38(050)123-32-34",
+    "     0503451234",
+    "(050)8889900",
+    "38050-111-22-22",
+    "38050 111 22 11   ",
+]
+
+def sanitized_numbers(number):
+
+    normalized_number = re.sub(r"[^0-9]",'',number)
+    if not normalized_number.startswith('+'):
+        if normalized_number.startswith("380"):
+            normalized_number = '+' + normalized_number
+        else:
+            normalized_number = '+38' + normalized_number
+    return normalized_number
+
+cleaned_numbers = [ sanitized_numbers(number) for number in raw_numbers]
+print(cleaned_numbers)
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
